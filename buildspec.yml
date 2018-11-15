@@ -9,6 +9,7 @@ phases:
       - REPOSITORY_URI=147205244694.dkr.ecr.ap-northeast-1.amazonaws.com/case1909574273
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - BRANCH_CP=aws codepipeline get-pipeline --name case1909574273 --query "pipeline.stages[?name=='Source'].actions[].configuration.Branch" --output text
   build:
     commands:
       - echo Build started on `date`
@@ -16,8 +17,10 @@ phases:
       - echo CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_RESOLVED_SOURCE_VERSION
       - echo CODEBUILD_SOURCE_REPO_URL $CODEBUILD_SOURCE_REPO_URL
       - echo CODEBUILD_SOURCE_VERSION $CODEBUILD_SOURCE_VERSION
-      - echo BRANCH $BRANCH
-      - docker build -t $REPOSITORY_URI:latest --build-arg CODEBUILD_RESOLVED_SOURCE_VERSION=$CODEBUILD_RESOLVED_SOURCE_VERSION .
+      - echo BRANCH_CB $BRANCH_CB
+      - echo BRANCH_CP $BRANCH_CP
+#      - docker build -t $REPOSITORY_URI:latest --build-arg CODEBUILD_RESOLVED_SOURCE_VERSION=$CODEBUILD_RESOLVED_SOURCE_VERSION .
+      - docker build -t $REPOSITORY_URI:latest --build-arg BRANCH_CP=$BRANCH_CP .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
