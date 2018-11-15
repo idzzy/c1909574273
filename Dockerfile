@@ -1,4 +1,3 @@
 FROM alpine
-RUN touch /tmp/hogehoge
-CMD echo "hogehoge"
-
+ARG CODEBUILD_RESOLVED_SOURCE_VERSION
+CMD echo $CODEBUILD_RESOLVED_SOURCE_VERSION
