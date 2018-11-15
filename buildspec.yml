@@ -9,7 +9,8 @@ phases:
       - REPOSITORY_URI=147205244694.dkr.ecr.ap-northeast-1.amazonaws.com/case1909574273
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
-      - BRANCH_CP=$(aws codepipeline get-pipeline --name case1909574273 --query "pipeline.stages[?name=='Source'].actions[].configuration.Branch" --output text)
+#      - BRANCH_CP=$(aws codepipeline get-pipeline --name case1909574273 --query "pipeline.stages[?name=='Source'].actions[].configuration.Branch" --output text)
+      - BRANCH_CP=$(aws codepipeline get-pipeline --name $CODEBUILD_INITIATOR --query "pipeline.stages[?name=='Source'].actions[].configuration.Branch" --output text)
   build:
     commands:
       - echo Build started on `date`
